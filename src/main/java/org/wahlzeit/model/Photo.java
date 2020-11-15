@@ -58,6 +58,11 @@ public class Photo extends DataObject {
 	public static final int MAX_THUMB_PHOTO_HEIGHT = 150;
 	
 	/**
+	 * Represents the location where a photo was taken at
+	 */
+	public Location location = null;
+	
+	/**
 	 * 
 	 */
 	protected PhotoId id = null;
@@ -105,11 +110,21 @@ public class Photo extends DataObject {
 	protected long creationTime = System.currentTimeMillis();
 	
 	/**
-	 * 
+	 * @methodtype constructor
+	 * @methodproperties convenience
 	 */
 	public Photo() {
 		id = PhotoId.getNextId();
 		incWriteCount();
+	}
+
+	/**
+	 * @methodtype constructor
+	 */
+	public Photo(Location location) {
+		id = PhotoId.getNextId();
+		incWriteCount();
+		this.location = location;
 	}
 	
 	/**
@@ -118,8 +133,17 @@ public class Photo extends DataObject {
 	 */
 	public Photo(PhotoId myId) {
 		id = myId;
-		
 		incWriteCount();
+	}
+
+	/**
+	 * 
+	 * @methodtype constructor
+	 */
+	public Photo(PhotoId myId, Location location) {
+		id = myId;
+		incWriteCount();
+		this.location = location;
 	}
 	
 	/**
@@ -164,6 +188,8 @@ public class Photo extends DataObject {
 		creationTime = rset.getLong("creation_time");
 
 		maxPhotoSize = PhotoSize.getFromWidthHeight(width, height);
+
+		location = new Location(rset.getString("location"));
 	}
 	
 	/**
@@ -183,7 +209,8 @@ public class Photo extends DataObject {
 		rset.updateInt("status", status.asInt());
 		rset.updateInt("praise_sum", praiseSum);
 		rset.updateInt("no_votes", noVotes);
-		rset.updateLong("creation_time", creationTime);		
+		rset.updateLong("creation_time", creationTime);
+		rset.updateString("location", location.toString());
 	}
 
 	/**
@@ -216,6 +243,22 @@ public class Photo extends DataObject {
 	public void setOwnerId(int newId) {
 		ownerId = newId;
 		incWriteCount();
+	}
+
+	/**
+	 * 
+	 * @methodtype get
+	 */
+	public Location getLocation() {
+		return this.location;
+	}
+	
+	/**
+	 * 
+	 * @methodtype set
+	 */
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 	
 	/**

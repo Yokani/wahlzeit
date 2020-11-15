@@ -127,4 +127,44 @@ public class ValueTest {
 		assert (test == PhotoId.getIdFromString(testString));
 	}
 
+
+	/**
+	 * creates several locations and tests their equals function
+	 */
+	@Test
+	public void testLocationEquals() {
+		Coordinate ca = new Coordinate(42.0, 24.0, 1337.0);
+		Coordinate cb = new Coordinate("42.0,24.0,1337.0");
+		Coordinate cc = new Coordinate("24.0,42.0,1337.0");
+		Coordinate cd = new Coordinate("24.0 , 42.0, nnn  1337.0");
+		Location la = new Location(ca);
+		Location lb = new Location(cb);
+		Location lc = new Location(cc);
+		Location ld = new Location(cd);
+		assert la.equals(lb);
+		assert !la.equals(lc);
+		assert !lb.equals(lc);
+		assert lc.equals(ld);
+	}
+
+	/**
+	 * creates several locations and tests their distance calculation
+	 */
+	@Test
+	public void testLocationDistance() {
+		double tolerance = 0.001;
+		Coordinate ca = new Coordinate(42.0, 24.0, 1337.0);
+		Coordinate cb = new Coordinate(42.0, 24.0, 1337.0);
+		Coordinate cc = new Coordinate(24.0, 42.0, 1337.0);
+		Location la = new Location(ca);
+		Location lb = new Location(cb);
+		Location lc = new Location(cc);
+
+		double distAB = la.distanceTo(lb);
+		double distAC = la.distanceTo(lc);
+
+		assert (distAB - 0.0) <= tolerance;
+		assert (distAC - 25.455844122715711) <= tolerance;
+	}
+
 }
