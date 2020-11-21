@@ -134,17 +134,14 @@ public class ValueTest {
 	@Test
 	public void testLocationEquals() {
 		Coordinate ca = new Coordinate(42.0, 24.0, 1337.0);
-		Coordinate cb = new Coordinate("42.0,24.0,1337.0");
-		Coordinate cc = new Coordinate("24.0,42.0,1337.0");
-		Coordinate cd = new Coordinate("24.0 , 42.0, nnn  1337.0");
+		Coordinate cb = new Coordinate(42.0, 24.0, 1337.1);
+		Coordinate cc = new Coordinate(42.0, 24.0, 1337.000000001);
 		Location la = new Location(ca);
 		Location lb = new Location(cb);
 		Location lc = new Location(cc);
-		Location ld = new Location(cd);
-		assert la.equals(lb);
-		assert !la.equals(lc);
+		assert la.equals(lc);
+		assert !la.equals(lb);
 		assert !lb.equals(lc);
-		assert lc.equals(ld);
 	}
 
 	/**

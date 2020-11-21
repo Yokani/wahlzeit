@@ -50,22 +50,7 @@ public class Coordinate {
         this.setY(y);
         this.setZ(z);
     }
-    /**
-	 * 
-	 * @methodtype constructor
-     * @methodproperties convenience
-	 */
-    public Coordinate(double[] coords){
-        this.setFromArray(coords);
-    }
-    /**
-	 * 
-	 * @methodtype constructor
-     * @methodproperties convenience
-	 */
-    public Coordinate(String coords){
-        this.setFromString(coords);
-    }
+
     /**
 	 * 
 	 * @methodtype conversion
@@ -141,6 +126,7 @@ public class Coordinate {
 	 * 
 	 * @methodtype set
      * @methodproperties composed, convenience
+     * implies that coordinates are given as the specific ordering [x,y,z]
 	 */
     public void setFromArray(double[] coords){
         assert coords.length == 3;
@@ -180,34 +166,45 @@ public class Coordinate {
 	 * @methodtype query
      * @methodproperties primitive
 	 */
-    private boolean checkX(double x){
-        return this.x == x;
+    private boolean checkEqual(double x, double y, double delta){
+        return Math.abs(x - y) < delta;
     }
-    /**
-	 * 
-	 * @methodtype query
-     * @methodproperties primitive
-	 */
-    private boolean checkY(double y){
-        return this.y == y;
-    }
-    /**
-	 * 
-	 * @methodtype query
-     * @methodproperties primitive
-	 */
-    private boolean checkZ(double z){
-        return this.z == z;
-    }
+
     /**
 	 * 
 	 * @methodtype query
      * @methodproperties composed
 	 */
-    protected boolean isEqual(Coordinate other){
-        boolean tmp1 = this.checkX(other.getX());
-        boolean tmp2 = this.checkY(other.getY());
-        boolean tmp3 = this.checkZ(other.getZ());
-        return tmp1 && tmp2 && tmp3;
-    }    
+    @Override
+    public boolean equals(Object o) {
+        // null check
+		if (o == null) {
+			return false;
+		}
+		// this instance check
+		if (this == o) {
+			return true;
+		}
+        // instanceof Check and actual value check
+        boolean tmp1 = (o instanceof Coordinate) && this.checkEqual(((Coordinate) o).getX(), this.x, 0.0001);
+        boolean tmp2 = (o instanceof Coordinate) && this.checkEqual(((Coordinate) o).getY(), this.y, 0.0001);
+        boolean tmp3 = (o instanceof Coordinate) && this.checkEqual(((Coordinate) o).getZ(), this.z, 0.0001);
+		if (tmp1 && tmp2 && tmp3) {
+			return true;
+		} else {
+			return false;
+		}
+    }
+
+    /**
+	 * 
+	 * @methodtype query
+	 */
+    @Override
+    public int hashCode() {
+        int a = (int) this.x / 3;
+        int b = (int) this.y / 3;
+        int c = (int) this.z / 3;
+        return a + b + c;
+    }
 }

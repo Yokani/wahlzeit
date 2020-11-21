@@ -19,24 +19,6 @@ public class Location {
     /**
 	 * 
 	 * @methodtype constructor
-     * @methodproperties convenience
-	 */
-    public Location(double[] coords){
-        this.coords = new Coordinate(coords);
-    }
-
-    /**
-	 * 
-	 * @methodtype constructor
-     * @methodproperties convenience
-	 */
-    public Location(String coords){
-        this.coords = new Coordinate(coords);
-    }
-
-    /**
-	 * 
-	 * @methodtype constructor
 	 */
     public Location(Coordinate coords){
         this.coords = coords;
@@ -84,7 +66,7 @@ public class Location {
      * @methodproperties primitive
 	 */
     public boolean equals(Location other){
-        return this.coords.isEqual(other.getCoordinates());
+        return this.coords.equals(other.getCoordinates());
     }
 
     /**
