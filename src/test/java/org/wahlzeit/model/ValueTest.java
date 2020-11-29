@@ -22,6 +22,8 @@ package org.wahlzeit.model;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -133,9 +135,9 @@ public class ValueTest {
 	 */
 	@Test
 	public void testLocationEquals() {
-		Coordinate ca = new Coordinate(42.0, 24.0, 1337.0);
-		Coordinate cb = new Coordinate(42.0, 24.0, 1337.1);
-		Coordinate cc = new Coordinate(42.0, 24.0, 1337.000000001);
+		CartesianCoordinate ca = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cb = new CartesianCoordinate(42.0, 24.0, 1337.1);
+		CartesianCoordinate cc = new CartesianCoordinate(42.0, 24.0, 1337.000000001);
 		Location la = new Location(ca);
 		Location lb = new Location(cb);
 		Location lc = new Location(cc);
@@ -150,9 +152,9 @@ public class ValueTest {
 	@Test
 	public void testLocationDistance() {
 		double tolerance = 0.001;
-		Coordinate ca = new Coordinate(42.0, 24.0, 1337.0);
-		Coordinate cb = new Coordinate(42.0, 24.0, 1337.0);
-		Coordinate cc = new Coordinate(24.0, 42.0, 1337.0);
+		CartesianCoordinate ca = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cb = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cc = new CartesianCoordinate(24.0, 42.0, 1337.0);
 		Location la = new Location(ca);
 		Location lb = new Location(cb);
 		Location lc = new Location(cc);
@@ -162,6 +164,66 @@ public class ValueTest {
 
 		assert (distAB - 0.0) <= tolerance;
 		assert (distAC - 25.455844122715711) <= tolerance;
+	}
+
+	@Test
+	public void testCoordinateConversions() {
+		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		SphericCoordinate sphericA = cartA.asSphericCoordinate();
+		SphericCoordinate sphericB = new SphericCoordinate(0.5191461142465229, 0.0361648881158502, 1337.8748072970056);
+		CartesianCoordinate cartB = sphericB.asCartesianCoordinate();
+
+		assertEquals(cartA, sphericA.asCartesianCoordinate());
+		assertEquals(sphericB, cartB.asSphericCoordinate());
+	}
+
+	@Test
+	public void testCoordinateEquals() {
+		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		SphericCoordinate sphericA = cartA.asSphericCoordinate();
+		SphericCoordinate sphericB = new SphericCoordinate(0.5191461142465229, 0.0361648881158502, 1337.8748072970056);
+		CartesianCoordinate cartB = sphericB.asCartesianCoordinate();
+
+		assertEquals(cartA.isEqual(cartB), true);
+		assertEquals(sphericA.isEqual(sphericB), true);
+		assertEquals(cartA, cartB);
+		assertEquals(sphericA, sphericB);
+		assertNotEquals(cartA, sphericA);
+		assertNotEquals(cartB, sphericB);
+		assertNotEquals(cartA, sphericB);
+		assertNotEquals(cartB, sphericA);
+	}
+
+	@Test
+	public void testCoordinateCartesianDistance() {
+		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cartB = new CartesianCoordinate(24.0, 42.0, 1337.0);
+		SphericCoordinate sphericB = cartB.asSphericCoordinate();
+
+		double tolerance = 0.0001;
+		double expectedCartesianDistance = 25.455844122715711;
+		double distABcartcart = cartA.getCartesianDistance(cartB);
+		double distABcartspheric = cartA.getCartesianDistance(sphericB);
+
+		assert (distABcartcart - expectedCartesianDistance) <= tolerance;
+		assert (distABcartspheric - expectedCartesianDistance) <= tolerance;
+		assert (distABcartcart - distABcartspheric) <= tolerance;
+	}
+
+	@Test
+	public void testCoordinateCentralAngle() {
+		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cartB = new CartesianCoordinate(24.0, 42.0, 1337.0);
+		SphericCoordinate sphericB = cartB.asSphericCoordinate();
+
+		double tolerance = 0.0001;
+		double expectedCentralAngle = 0.019027361895043796;
+		double distABcartcart = cartA.getCentralAngle(cartB);
+		double distABcartspheric = cartA.getCentralAngle(sphericB);
+
+		assert (distABcartcart - expectedCentralAngle) <= tolerance;
+		assert (distABcartspheric - expectedCentralAngle) <= tolerance;
+		assert (distABcartcart - distABcartspheric) <= tolerance;
 	}
 
 }

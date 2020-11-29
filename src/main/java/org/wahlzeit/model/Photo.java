@@ -192,7 +192,7 @@ public class Photo extends DataObject {
 		double lx = rset.getDouble("location_x");
 		double ly = rset.getDouble("location_y");
 		double lz = rset.getDouble("location_z");
-		location = new Location(new Coordinate(lx, ly, lz));
+		location = new Location(new CartesianCoordinate(lx, ly, lz));
 	}
 	
 	/**

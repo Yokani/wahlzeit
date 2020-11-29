@@ -5,7 +5,7 @@ package org.wahlzeit.model;
  */
 public class Location {
 
-    private Coordinate coords;
+    private CartesianCoordinate coords;
 
     /**
 	 * 
@@ -13,14 +13,14 @@ public class Location {
      * @methodproperties convenience
 	 */
     public Location(){
-        this.coords = new Coordinate();
+        this.coords = new CartesianCoordinate();
     }
 
     /**
 	 * 
 	 * @methodtype constructor
 	 */
-    public Location(Coordinate coords){
+    public Location(CartesianCoordinate coords){
         this.coords = coords;
     }
 
@@ -29,7 +29,7 @@ public class Location {
 	 * @methodtype set
      * @methodproperties primitive
 	 */
-    public void setCoordinates(Coordinate coords){
+    public void setCoordinates(CartesianCoordinate coords){
         this.coords = coords;
     }
 
@@ -38,7 +38,7 @@ public class Location {
 	 * @methodtype get
      * @methodproperties primitive
 	 */
-    public Coordinate getCoordinates(){
+    public CartesianCoordinate getCoordinates(){
         return this.coords;
     }
 
@@ -49,15 +49,6 @@ public class Location {
 	 */
     public double[] asArray(){
         return this.coords.asArray();
-    }
-
-    /**
-	 * 
-	 * @methodtype conversion
-     * @methodproperties primitive
-	 */
-    public String toString(){
-        return this.coords.asString();
     }
 
     /**

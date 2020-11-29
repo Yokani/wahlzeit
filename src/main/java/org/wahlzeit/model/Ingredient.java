@@ -82,4 +82,27 @@ public class Ingredient {
     public String toString(){
         return this.name  + (amountIsKnown ? ": " + String.valueOf(amount) : "");
     }
+
+    /**
+     * @methodtype query
+     * @description checks weither two ingredients share the same name
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+			return false;
+		}
+		if (this == other) {
+			return true;
+        }
+        if (!(other instanceof Ingredient)){
+            return false;
+        }
+        return this.name.equals(((Ingredient) other).getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.name.hashCode() + 42;
+    }
 }
