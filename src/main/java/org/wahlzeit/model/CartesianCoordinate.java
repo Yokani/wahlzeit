@@ -1,6 +1,6 @@
 package org.wahlzeit.model;
 
-public class CartesianCoordinate implements Coordinate{
+public class CartesianCoordinate extends AbstractCoordinate{
 
     private double x;
     private double y;
@@ -81,19 +81,11 @@ public class CartesianCoordinate implements Coordinate{
      * @methodproperties primitive
      * @description Computes the cartesian distance between two cartesian coordinates
 	 */
-    protected double getDistance(CartesianCoordinate other){
+    public double getDistance(CartesianCoordinate other){
         double xDiff = Math.pow(other.getX() - this.x, 2);
         double yDiff = Math.pow(other.getY() - this.y, 2);
         double zDiff = Math.pow(other.getZ() - this.z, 2);
         return Math.sqrt(xDiff + yDiff + zDiff);
-    }
-
-    /**
-	 * @methodtype query
-     * @methodproperties primitive
-	 */
-    private boolean checkEqual(double x, double y, double delta){
-        return Math.abs(x - y) < delta;
     }
 
     /**
@@ -125,29 +117,18 @@ public class CartesianCoordinate implements Coordinate{
 
     @Override
     public SphericCoordinate asSphericCoordinate() {
-        double phi = Math.atan(this.y / this.x);
-        double radius = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2));
+        // to prevent arithmetric exceptions
+        double tmpX;
+        if(this.x == 0.0){
+            // by my specification this value is equal to zero
+            tmpX = 0.000001;
+        }else{
+            tmpX = this.x;
+        }
+        double phi = Math.atan(this.y / tmpX);
+        double radius = Math.sqrt(Math.pow(tmpX, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2));
         double theta = Math.acos(this.z / radius);
         return new SphericCoordinate(phi, theta, radius);
-    }
-
-    @Override
-    public double getCartesianDistance(Coordinate other) {
-        CartesianCoordinate selfInCartesian = this.asCartesianCoordinate();
-        CartesianCoordinate otherInCartesian = other.asCartesianCoordinate();
-        return selfInCartesian.getDistance(otherInCartesian);
-    }
-
-    @Override
-    public double getCentralAngle(Coordinate other) {
-        SphericCoordinate selfInSpheric = this.asSphericCoordinate();
-        SphericCoordinate otherInSpheric = other.asSphericCoordinate();
-        return selfInSpheric.getDistance(otherInSpheric);
-    }
-
-    @Override
-    public boolean isEqual(Coordinate other) {
-        return this.equals(other);
     }
 
     /**
