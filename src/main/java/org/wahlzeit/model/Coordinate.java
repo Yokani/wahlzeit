@@ -2,6 +2,7 @@ package org.wahlzeit.model;
 
 /**
  * interface for coordinate representations
+ * invariants: the internal variables of a coordinate representation may not be null or NaN
  */
 public interface Coordinate {
 
@@ -24,6 +25,7 @@ public interface Coordinate {
 	 * @methodtype comparison
      * @methodproperties hook
      * @return the cartesian distance between two coordinate instances independent of their type
+     * @param other may not be null (precondition)
 	 */
     public double getCartesianDistance(Coordinate other);
 
@@ -31,6 +33,7 @@ public interface Coordinate {
 	 * @methodtype comparison
      * @methodproperties hook
      * @return the spherical distance or rather the central angle between two coordinate instances independent of their type
+     * @param other may not be null (precondition)
 	 */
     public double getCentralAngle(Coordinate other);
 

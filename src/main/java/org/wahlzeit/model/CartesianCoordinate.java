@@ -22,25 +22,35 @@ public class CartesianCoordinate extends AbstractCoordinate{
         this.x = x;
         this.y = y;
         this.z = z;
+        assertClassInvariants();
     }
 
     public double getX(){
+        assertClassInvariants();
         return this.x;
     }
     public double getY(){
+        assertClassInvariants();
         return this.y;
     }
     public double getZ(){
+        assertClassInvariants();
         return this.z;
     }
     public void setX(double x){
+        assertClassInvariants();
         this.x = x;
+        assertClassInvariants();
     }
     public void setY(double y){
+        assertClassInvariants();
         this.y = y;
+        assertClassInvariants();
     }
     public void setZ(double z){
+        assertClassInvariants();
         this.z = z;
+        assertClassInvariants();
     }
 
     /**
@@ -48,6 +58,7 @@ public class CartesianCoordinate extends AbstractCoordinate{
      * @methodproperties composed, convenience
 	 */
     public double[] asArray(){
+        assertClassInvariants();
         double[] coords = new double[3];
         coords[0] = this.getX();
         coords[1] = this.getY();
@@ -58,18 +69,22 @@ public class CartesianCoordinate extends AbstractCoordinate{
 	 * @methodtype set
      * @methodproperties composed, convenience
      * @description implies that coordinates are given as the specific ordering [x,y,z]
+     * @pre: coords.length == 3
 	 */
     public void setFromArray(double[] coords){
+        assertClassInvariants();
         assert coords.length == 3;
         this.setX(coords[0]);
         this.setY(coords[1]);
         this.setZ(coords[2]);
+        assertClassInvariants();
     }
     /**
 	 * @methodtype conversion
      * @methodproperties convenience
 	 */
     public String toString(){
+        assertClassInvariants();
         String xS = String.valueOf(this.x);
         String yS = String.valueOf(this.y);
         String zS = String.valueOf(this.z);
@@ -82,6 +97,7 @@ public class CartesianCoordinate extends AbstractCoordinate{
      * @description Computes the cartesian distance between two cartesian coordinates
 	 */
     public double getDistance(CartesianCoordinate other){
+        assertClassInvariants();
         double xDiff = Math.pow(other.getX() - this.x, 2);
         double yDiff = Math.pow(other.getY() - this.y, 2);
         double zDiff = Math.pow(other.getZ() - this.z, 2);
@@ -112,23 +128,30 @@ public class CartesianCoordinate extends AbstractCoordinate{
 
     @Override
     public CartesianCoordinate asCartesianCoordinate() {
+        assertClassInvariants();
         return this;
     }
 
+    /**
+     * @pre: x > 0.0
+     * @post: radius > 0.0
+     */
     @Override
     public SphericCoordinate asSphericCoordinate() {
-        // to prevent arithmetric exceptions
-        double tmpX;
-        if(this.x == 0.0){
-            // by my specification this value is equal to zero
-            tmpX = 0.000001;
-        }else{
-            tmpX = this.x;
-        }
-        double phi = Math.atan(this.y / tmpX);
-        double radius = Math.sqrt(Math.pow(tmpX, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2));
+        assertClassInvariants();
+        assertIsValidX(this.x);
+        double phi = Math.atan(this.y / this.x);
+        double radius = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2));
         double theta = Math.acos(this.z / radius);
+        assert radius > 0.0;
         return new SphericCoordinate(phi, theta, radius);
+    }
+
+    protected void assertIsValidX(double x) throws ArithmeticException{
+        if(x == 0.0){
+            String msg = "CartesianCoordinate's x value equals 0.0";
+            throw new ArithmeticException(msg);
+        }
     }
 
     /**
@@ -136,9 +159,23 @@ public class CartesianCoordinate extends AbstractCoordinate{
 	 */
     @Override
     public int hashCode() {
+        assertClassInvariants();
         int a = (int) this.x / 3;
         int b = (int) this.y / 3;
         int c = (int) this.z / 3;
         return a + b + c;
+    }
+
+    @Override
+    protected void assertClassInvariants() {
+        if(Double.isNaN(this.x)){
+            throw new IllegalStateException("x is not a number");
+        }
+        if(Double.isNaN(this.y)){
+            throw new IllegalStateException("y is not a number");
+        }
+        if(Double.isNaN(this.z)){
+            throw new IllegalStateException("z is not a number");
+        }
     }
 }

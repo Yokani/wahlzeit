@@ -226,4 +226,34 @@ public class ValueTest {
 		assert (distABcartcart - distABcartspheric) <= tolerance;
 	}
 
+	@Test(expected = IllegalStateException.class)
+	public void testCartesianCoordinateNaN(){
+		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		cartA.setX(Double.NaN);
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testSphericCoordinateNaN(){
+		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		SphericCoordinate sphericA = cartA.asSphericCoordinate();
+		sphericA.setRadius(Double.NaN);
+	}
+
+	@Test(expected = ArithmeticException.class)
+	public void testCartesianToSphericZeroDivision(){
+		CartesianCoordinate cartA = new CartesianCoordinate(0.0, 24.0, 1337.0);
+		SphericCoordinate sphericA = cartA.asSphericCoordinate();
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCartesianDistanceNullArgument(){
+		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		cartA.getCartesianDistance(null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCentralAngleNullArgument(){
+		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		cartA.getCentralAngle(null);
+	}
 }

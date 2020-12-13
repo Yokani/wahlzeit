@@ -25,25 +25,35 @@ public class SphericCoordinate extends AbstractCoordinate{
         this.phi = phi;
         this.theta = theta;
         this.radius = radius;
+        assertClassInvariants();
     }
 
     public double getPhi(){
+        assertClassInvariants();
         return this.phi;
     }
     public double getTheta(){
+        assertClassInvariants();
         return this.theta;
     }
     public double getRadius(){
+        assertClassInvariants();
         return this.radius;
     }
     public void setPhi(double phi){
+        assertClassInvariants();
         this.phi = phi;
+        assertClassInvariants();
     }
     public void setTheta(double theta){
+        assertClassInvariants();
         this.theta = theta;
+        assertClassInvariants();
     }
     public void setRadius(double radius){
+        assertClassInvariants();
         this.radius = radius;
+        assertClassInvariants();
     }
     /**
 	 * @methodtype comparison
@@ -51,6 +61,7 @@ public class SphericCoordinate extends AbstractCoordinate{
      * @description Computes the spheric distance between two spheric coordinates or rather their central angle
 	 */
     public double getDistance(SphericCoordinate other){
+        assertClassInvariants();
         double selfLat = this.theta - (90 * Math.PI)/180;
         double selfLon = this.phi;
         double otherLat = other.getTheta() - (90 * Math.PI)/180;
@@ -83,6 +94,7 @@ public class SphericCoordinate extends AbstractCoordinate{
 
     @Override
     public CartesianCoordinate asCartesianCoordinate() {
+        assertClassInvariants();
         double x = this.radius * Math.sin(this.theta) * Math.cos(this.phi);
         double y = this.radius * Math.sin(this.theta) * Math.sin(this.phi);
         double z = this.radius * Math.cos(this.theta);
@@ -91,6 +103,7 @@ public class SphericCoordinate extends AbstractCoordinate{
 
     @Override
     public SphericCoordinate asSphericCoordinate() {
+        assertClassInvariants();
         return this;
     }
 
@@ -99,9 +112,23 @@ public class SphericCoordinate extends AbstractCoordinate{
 	 */
     @Override
     public int hashCode() {
+        assertClassInvariants();
         int a = (int) this.phi / 3;
         int b = (int) this.theta / 3;
         int c = (int) this.radius / 3;
         return a + b + c;
+    }
+
+    @Override
+    protected void assertClassInvariants() {
+        if(Double.isNaN(this.phi)){
+            throw new IllegalStateException("phi is not a number");
+        }
+        if(Double.isNaN(this.theta)){
+            throw new IllegalStateException("theta is not a number");
+        }
+        if(Double.isNaN(this.radius)){
+            throw new IllegalStateException("radius is not a number");
+        }
     }
 }
