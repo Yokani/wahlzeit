@@ -139,19 +139,17 @@ public class CartesianCoordinate extends AbstractCoordinate{
     @Override
     public SphericCoordinate asSphericCoordinate() {
         assertClassInvariants();
-        assertIsValidX(this.x);
-        double phi = Math.atan(this.y / this.x);
+        double phi;
+        try{
+            phi = Math.atan(this.y / this.x);
+        }catch(ArithmeticException aE){
+            // if x is 0.0 - set it to 0.0001, because that equals to 0 according to our contract
+            phi = Math.atan(this.y / 0.0001);
+        }
         double radius = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2));
         double theta = Math.acos(this.z / radius);
-        assert radius > 0.0;
+        // postconditions are checked after constructor via. class invariants
         return new SphericCoordinate(phi, theta, radius);
-    }
-
-    protected void assertIsValidX(double x) throws ArithmeticException{
-        if(x == 0.0){
-            String msg = "CartesianCoordinate's x value equals 0.0";
-            throw new ArithmeticException(msg);
-        }
     }
 
     /**

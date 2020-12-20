@@ -2,6 +2,9 @@ package org.wahlzeit.model;
 
 public abstract class AbstractCoordinate implements Coordinate{
 
+    /**
+     * @pre: other != null
+     */
     @Override
     public double getCartesianDistance(Coordinate other) {
         assertClassInvariants();
@@ -11,6 +14,9 @@ public abstract class AbstractCoordinate implements Coordinate{
         return selfInCartesian.getDistance(otherInCartesian);
     }
 
+    /**
+     * @pre: other != null
+     */
     @Override
     public double getCentralAngle(Coordinate other) {
         assertClassInvariants();
@@ -40,7 +46,7 @@ public abstract class AbstractCoordinate implements Coordinate{
         }
     }
 
-    protected abstract void assertClassInvariants();
+    protected abstract void assertClassInvariants() throws IllegalStateException;
 
     /**
 	 * @methodtype query

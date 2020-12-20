@@ -13,11 +13,8 @@ import org.junit.Test;
  */
 public class EnergyDrinkPhotoTest {
 
-	/**
-	 *
-	 */
 	@Test
-	public void testCreateInstances() {
+	public void testCreateInstances() throws CreateEnergyDrinkPhotoException {
 		EnergyDrinkPhotoFactory pf = EnergyDrinkPhotoFactory.getInstance();
 		PhotoId id1 = new PhotoId(1);
 		PhotoId id2 = new PhotoId(2);
@@ -39,9 +36,27 @@ public class EnergyDrinkPhotoTest {
 		assertEquals(p2.getBrand(), "Booster Exotic");
 	}
 
-    /**
-	 *
-	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testCreateEnergyDrinkPhotoExceptionNullArgument() throws CreateEnergyDrinkPhotoException {
+		EnergyDrinkPhotoFactory pf = EnergyDrinkPhotoFactory.getInstance();
+		EnergyDrinkPhoto p2 = pf.createPhoto(null, "bla");
+	}
+
+	@Test(expected = CreateEnergyDrinkPhotoException.class)
+	public void testCreateEnergyDrinkPhotoException() throws CreateEnergyDrinkPhotoException {
+		EnergyDrinkPhotoFactory pf = EnergyDrinkPhotoFactory.getInstance();
+		PhotoId id1 = new PhotoId(1);
+		EnergyDrinkPhoto p2 = pf.createPhoto(id1, null);
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testEnergyDrinkPhotoCorruption() throws CreateEnergyDrinkPhotoException {
+		EnergyDrinkPhotoFactory pf = EnergyDrinkPhotoFactory.getInstance();
+		PhotoId id1 = new PhotoId(1);
+		EnergyDrinkPhoto p2 = pf.createPhoto(id1, "bla");
+		p2.setBrand(null);
+	}
+
 	@Test
 	public void testIngredientEquals() {
 		Ingredient i1 = new Ingredient("sugar", 10.4);

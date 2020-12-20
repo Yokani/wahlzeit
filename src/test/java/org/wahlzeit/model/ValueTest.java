@@ -239,12 +239,6 @@ public class ValueTest {
 		sphericA.setRadius(Double.NaN);
 	}
 
-	@Test(expected = ArithmeticException.class)
-	public void testCartesianToSphericZeroDivision(){
-		CartesianCoordinate cartA = new CartesianCoordinate(0.0, 24.0, 1337.0);
-		SphericCoordinate sphericA = cartA.asSphericCoordinate();
-	}
-
 	@Test(expected = IllegalArgumentException.class)
 	public void testCartesianDistanceNullArgument(){
 		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);

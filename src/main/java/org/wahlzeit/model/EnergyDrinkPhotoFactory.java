@@ -28,19 +28,50 @@ public class EnergyDrinkPhotoFactory extends PhotoFactory {
         instance = EDPFIstance;
     }
 
-    public EnergyDrinkPhoto createPhoto(List<Ingredient> ingredients, String brand, String manufacturer) {
-        return new EnergyDrinkPhoto(ingredients, brand, manufacturer);
+    /**
+     * @pre: id may not be null
+     * @post: ingredients, brand, manufacturer of new instance may not be null
+     * @param id PhotoId
+     * @param ingredients list of this energy drinks ingredients
+     * @param brand brand of this energy drink
+     * @param manufacturer manufacturer of this energy drink
+     * @return a new EnergyDrinkPhoto instance
+     * @throws CreateEnergyDrinkPhotoException
+     */
+    public EnergyDrinkPhoto createPhoto(PhotoId id, List<Ingredient> ingredients, String brand, String manufacturer) throws CreateEnergyDrinkPhotoException {
+        assertNotNullArgument(id);
+        EnergyDrinkPhoto newPhoto;
+        try{
+            newPhoto = new EnergyDrinkPhoto(id, ingredients, brand, manufacturer);
+        }catch(IllegalStateException e){
+            throw new CreateEnergyDrinkPhotoException(e);
+        }
+        return newPhoto;
     }
 
-    public EnergyDrinkPhoto createPhoto(PhotoId id, List<Ingredient> ingredients, String brand, String manufacturer) {
-        return new EnergyDrinkPhoto(id, ingredients, brand, manufacturer);
+    /**
+     * @pre: id may not be null
+     * @post: brand of new instance may not be null 
+     * @param id PhotoId
+     * @param brand brand of this energy drink
+     * @return a new EnergyDrinkPhoto instance
+     * @throws CreateEnergyDrinkPhotoException
+     */
+    public EnergyDrinkPhoto createPhoto(PhotoId id, String brand) throws CreateEnergyDrinkPhotoException {
+        assertNotNullArgument(id);
+        EnergyDrinkPhoto newPhoto;
+        try{
+            newPhoto = new EnergyDrinkPhoto(id, brand);
+        }catch(IllegalStateException e){
+            throw new CreateEnergyDrinkPhotoException(e);
+        }
+        return newPhoto;
     }
 
-    public EnergyDrinkPhoto createPhoto(String brand) {
-        return new EnergyDrinkPhoto(brand);
-    }
-
-    public EnergyDrinkPhoto createPhoto(PhotoId id, String brand) {
-        return new EnergyDrinkPhoto(id, brand);
-    }
+    protected void assertNotNullArgument(Object o) throws IllegalArgumentException {
+		if(o == null){
+            String message = "Argument can't be null";
+            throw new IllegalArgumentException(message);
+        }
+	}
 }

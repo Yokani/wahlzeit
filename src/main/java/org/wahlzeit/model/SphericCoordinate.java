@@ -121,6 +121,15 @@ public class SphericCoordinate extends AbstractCoordinate{
 
     @Override
     protected void assertClassInvariants() {
+        if(phi <= -Math.PI || phi > Math.PI){
+            throw new IllegalStateException("phi must be in (-PI, PI]");
+        }
+        if(theta <= -Math.PI / 2 || theta > Math.PI / 2){
+            throw new IllegalStateException("theta must be in (-PI/2, PI]");
+        }
+        if(radius < 0.0){
+            throw new IllegalStateException("radius has to be non-negative");
+        }
         if(Double.isNaN(this.phi)){
             throw new IllegalStateException("phi is not a number");
         }
