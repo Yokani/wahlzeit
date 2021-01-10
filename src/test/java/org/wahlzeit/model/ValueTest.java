@@ -26,10 +26,14 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Test cases for a variety of value object classes.
  */
 public class ValueTest {
+
+	private CoordinateHelper coordinateHelper = CoordinateHelper.getInstance();
 
 	/**
 	 *
@@ -135,9 +139,9 @@ public class ValueTest {
 	 */
 	@Test
 	public void testLocationEquals() {
-		CartesianCoordinate ca = new CartesianCoordinate(42.0, 24.0, 1337.0);
-		CartesianCoordinate cb = new CartesianCoordinate(42.0, 24.0, 1337.1);
-		CartesianCoordinate cc = new CartesianCoordinate(42.0, 24.0, 1337.000000001);
+		CartesianCoordinate ca = coordinateHelper.requestCartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cb = coordinateHelper.requestCartesianCoordinate(42.0, 24.0, 1337.1);
+		CartesianCoordinate cc = coordinateHelper.requestCartesianCoordinate(42.0, 24.0, 1337.000000001);
 		Location la = new Location(ca);
 		Location lb = new Location(cb);
 		Location lc = new Location(cc);
@@ -152,9 +156,9 @@ public class ValueTest {
 	@Test
 	public void testLocationDistance() {
 		double tolerance = 0.001;
-		CartesianCoordinate ca = new CartesianCoordinate(42.0, 24.0, 1337.0);
-		CartesianCoordinate cb = new CartesianCoordinate(42.0, 24.0, 1337.0);
-		CartesianCoordinate cc = new CartesianCoordinate(24.0, 42.0, 1337.0);
+		CartesianCoordinate ca = coordinateHelper.requestCartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cb = coordinateHelper.requestCartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cc = coordinateHelper.requestCartesianCoordinate(24.0, 42.0, 1337.0);
 		Location la = new Location(ca);
 		Location lb = new Location(cb);
 		Location lc = new Location(cc);
@@ -168,9 +172,9 @@ public class ValueTest {
 
 	@Test
 	public void testCoordinateConversions() {
-		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cartA = coordinateHelper.requestCartesianCoordinate(42.0, 24.0, 1337.0);
 		SphericCoordinate sphericA = cartA.asSphericCoordinate();
-		SphericCoordinate sphericB = new SphericCoordinate(0.5191461142465229, 0.0361648881158502, 1337.8748072970056);
+		SphericCoordinate sphericB = coordinateHelper.requestSphericCoordinate(0.5191461142465229, 0.0361648881158502, 1337.8748072970056);
 		CartesianCoordinate cartB = sphericB.asCartesianCoordinate();
 
 		assertEquals(cartA, sphericA.asCartesianCoordinate());
@@ -179,9 +183,9 @@ public class ValueTest {
 
 	@Test
 	public void testCoordinateEquals() {
-		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cartA = coordinateHelper.requestCartesianCoordinate(42.0, 24.0, 1337.0);
 		SphericCoordinate sphericA = cartA.asSphericCoordinate();
-		SphericCoordinate sphericB = new SphericCoordinate(0.5191461142465229, 0.0361648881158502, 1337.8748072970056);
+		SphericCoordinate sphericB = coordinateHelper.requestSphericCoordinate(0.5191461142465229, 0.0361648881158502, 1337.8748072970056);
 		CartesianCoordinate cartB = sphericB.asCartesianCoordinate();
 
 		assertEquals(cartA.isEqual(cartB), true);
@@ -196,8 +200,8 @@ public class ValueTest {
 
 	@Test
 	public void testCoordinateCartesianDistance() {
-		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
-		CartesianCoordinate cartB = new CartesianCoordinate(24.0, 42.0, 1337.0);
+		CartesianCoordinate cartA = coordinateHelper.requestCartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cartB = coordinateHelper.requestCartesianCoordinate(24.0, 42.0, 1337.0);
 		SphericCoordinate sphericB = cartB.asSphericCoordinate();
 
 		double tolerance = 0.0001;
@@ -212,8 +216,8 @@ public class ValueTest {
 
 	@Test
 	public void testCoordinateCentralAngle() {
-		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
-		CartesianCoordinate cartB = new CartesianCoordinate(24.0, 42.0, 1337.0);
+		CartesianCoordinate cartA = coordinateHelper.requestCartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cartB = coordinateHelper.requestCartesianCoordinate(24.0, 42.0, 1337.0);
 		SphericCoordinate sphericB = cartB.asSphericCoordinate();
 
 		double tolerance = 0.0001;
@@ -226,28 +230,21 @@ public class ValueTest {
 		assert (distABcartcart - distABcartspheric) <= tolerance;
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testCartesianCoordinateNaN(){
-		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
-		cartA.setX(Double.NaN);
-	}
-
-	@Test(expected = IllegalStateException.class)
-	public void testSphericCoordinateNaN(){
-		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
-		SphericCoordinate sphericA = cartA.asSphericCoordinate();
-		sphericA.setRadius(Double.NaN);
+		double nan = Double.NaN;
+		coordinateHelper.requestCartesianCoordinate(nan, 24.0, 1337.0);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCartesianDistanceNullArgument(){
-		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cartA = coordinateHelper.requestCartesianCoordinate(42.0, 24.0, 1337.0);
 		cartA.getCartesianDistance(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCentralAngleNullArgument(){
-		CartesianCoordinate cartA = new CartesianCoordinate(42.0, 24.0, 1337.0);
+		CartesianCoordinate cartA = coordinateHelper.requestCartesianCoordinate(42.0, 24.0, 1337.0);
 		cartA.getCentralAngle(null);
 	}
 }

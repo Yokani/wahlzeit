@@ -10,15 +10,6 @@ public class Location {
     /**
 	 * 
 	 * @methodtype constructor
-     * @methodproperties convenience
-	 */
-    public Location(){
-        this.coords = new CartesianCoordinate();
-    }
-
-    /**
-	 * 
-	 * @methodtype constructor
 	 */
     public Location(CartesianCoordinate coords){
         this.coords = coords;

@@ -1,24 +1,17 @@
 package org.wahlzeit.model;
 
-public class CartesianCoordinate extends AbstractCoordinate{
+public final class CartesianCoordinate extends AbstractCoordinate{
 
-    private double x;
-    private double y;
-    private double z;
+    private final double x;
+    private final double y;
+    private final double z;
+
+    private CoordinateHelper coordinateHelper = CoordinateHelper.getInstance();
 
     /**
 	 * @methodtype constructor
-     * @methodproperties convenience
 	 */
-    public CartesianCoordinate(){
-        this.x = 0.0;
-        this.y = 0.0;
-        this.z = 0.0;
-    }
-    /**
-	 * @methodtype constructor
-	 */
-    public CartesianCoordinate(double x, double y, double z){
+    private CartesianCoordinate(double x, double y, double z){
         this.x = x;
         this.y = y;
         this.z = z;
@@ -37,21 +30,6 @@ public class CartesianCoordinate extends AbstractCoordinate{
         assertClassInvariants();
         return this.z;
     }
-    public void setX(double x){
-        assertClassInvariants();
-        this.x = x;
-        assertClassInvariants();
-    }
-    public void setY(double y){
-        assertClassInvariants();
-        this.y = y;
-        assertClassInvariants();
-    }
-    public void setZ(double z){
-        assertClassInvariants();
-        this.z = z;
-        assertClassInvariants();
-    }
 
     /**
 	 * @methodtype conversion
@@ -64,31 +42,6 @@ public class CartesianCoordinate extends AbstractCoordinate{
         coords[1] = this.getY();
         coords[2] = this.getZ();
         return coords;
-    }
-    /**
-	 * @methodtype set
-     * @methodproperties composed, convenience
-     * @description implies that coordinates are given as the specific ordering [x,y,z]
-     * @pre: coords.length == 3
-	 */
-    public void setFromArray(double[] coords){
-        assertClassInvariants();
-        assert coords.length == 3;
-        this.setX(coords[0]);
-        this.setY(coords[1]);
-        this.setZ(coords[2]);
-        assertClassInvariants();
-    }
-    /**
-	 * @methodtype conversion
-     * @methodproperties convenience
-	 */
-    public String toString(){
-        assertClassInvariants();
-        String xS = String.valueOf(this.x);
-        String yS = String.valueOf(this.y);
-        String zS = String.valueOf(this.z);
-        return xS + "," + yS + "," + zS;
     }
     
     /**
@@ -149,7 +102,12 @@ public class CartesianCoordinate extends AbstractCoordinate{
         double radius = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2));
         double theta = Math.acos(this.z / radius);
         // postconditions are checked after constructor via. class invariants
-        return new SphericCoordinate(phi, theta, radius);
+        return coordinateHelper.requestSphericCoordinate(phi, theta, radius);
+    }
+
+    @Override
+    public String toString() {
+        return "x: " + String.valueOf(x) + ", y: " +  String.valueOf(y) + ", z: " + String.valueOf(z);
     }
 
     /**
@@ -158,10 +116,7 @@ public class CartesianCoordinate extends AbstractCoordinate{
     @Override
     public int hashCode() {
         assertClassInvariants();
-        int a = (int) this.x / 3;
-        int b = (int) this.y / 3;
-        int c = (int) this.z / 3;
-        return a + b + c;
+        return this.toString().hashCode();
     }
 
     @Override

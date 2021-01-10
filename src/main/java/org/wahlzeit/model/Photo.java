@@ -61,6 +61,11 @@ public class Photo extends DataObject {
 	 * Represents the location where a photo was taken at
 	 */
 	public Location location = null;
+
+	/**
+	 * to access shared coordinate objects
+	 */
+	private CoordinateHelper coordinateHelper = CoordinateHelper.getInstance();
 	
 	/**
 	 * 
@@ -192,7 +197,9 @@ public class Photo extends DataObject {
 		double lx = rset.getDouble("location_x");
 		double ly = rset.getDouble("location_y");
 		double lz = rset.getDouble("location_z");
-		location = new Location(new CartesianCoordinate(lx, ly, lz));
+
+		CartesianCoordinate template = coordinateHelper.requestCartesianCoordinate(lx, ly, lz);
+		location = new Location(template);
 	}
 	
 	/**

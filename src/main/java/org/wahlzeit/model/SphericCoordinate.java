@@ -1,27 +1,20 @@
 package org.wahlzeit.model;
 
-public class SphericCoordinate extends AbstractCoordinate{
+public final class SphericCoordinate extends AbstractCoordinate{
 
     // also called azimuthal, in radian
-    private double phi;
+    private final double phi;
     // also called polar, in radian
-    private double theta;
+    private final double theta;
     
-    private double radius;
+    private final double radius;
+
+    private CoordinateHelper coordinateHelper = CoordinateHelper.getInstance();
 
     /**
 	 * @methodtype constructor
-     * @methodproperties convenience
 	 */
-    public SphericCoordinate(){
-        this.phi = 0.0;
-        this.theta = 0.0;
-        this.radius = 0.0;
-    }
-    /**
-	 * @methodtype constructor
-	 */
-    public SphericCoordinate(double phi, double theta, double radius){
+    private SphericCoordinate(double phi, double theta, double radius){
         this.phi = phi;
         this.theta = theta;
         this.radius = radius;
@@ -40,21 +33,7 @@ public class SphericCoordinate extends AbstractCoordinate{
         assertClassInvariants();
         return this.radius;
     }
-    public void setPhi(double phi){
-        assertClassInvariants();
-        this.phi = phi;
-        assertClassInvariants();
-    }
-    public void setTheta(double theta){
-        assertClassInvariants();
-        this.theta = theta;
-        assertClassInvariants();
-    }
-    public void setRadius(double radius){
-        assertClassInvariants();
-        this.radius = radius;
-        assertClassInvariants();
-    }
+
     /**
 	 * @methodtype comparison
      * @methodproperties primitive
@@ -98,7 +77,7 @@ public class SphericCoordinate extends AbstractCoordinate{
         double x = this.radius * Math.sin(this.theta) * Math.cos(this.phi);
         double y = this.radius * Math.sin(this.theta) * Math.sin(this.phi);
         double z = this.radius * Math.cos(this.theta);
-        return new CartesianCoordinate(x, y, z);
+        return coordinateHelper.requestCartesianCoordinate(x, y, z);
     }
 
     @Override
@@ -107,16 +86,18 @@ public class SphericCoordinate extends AbstractCoordinate{
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "phi: " + String.valueOf(phi) + ", theta: " +  String.valueOf(theta) + ", radius: " + String.valueOf(radius);
+    }
+
     /**
 	 * @methodtype query
 	 */
     @Override
     public int hashCode() {
         assertClassInvariants();
-        int a = (int) this.phi / 3;
-        int b = (int) this.theta / 3;
-        int c = (int) this.radius / 3;
-        return a + b + c;
+        return this.toString().hashCode();
     }
 
     @Override
