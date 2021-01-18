@@ -1,5 +1,13 @@
 package org.wahlzeit.model;
 
+@DesignPattern(
+    name = "Template_Method",
+    participants = {"ConcreteClass"}
+)
+@DesignPattern(
+    name = "Bridge",
+    participants = {"ConcreteBridge"}
+)
 public final class CartesianCoordinate extends AbstractCoordinate{
 
     private final double x;

@@ -2,6 +2,10 @@ package org.wahlzeit.model;
 
 import java.util.List;
 
+@DesignPattern(
+	name = "Abstract_Factory",
+	participants = {"ConcreteFactory"}
+)
 public class EnergyDrinkPhotoFactory extends PhotoFactory {
     
     private static EnergyDrinkPhotoFactory instance = null;

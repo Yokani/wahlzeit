@@ -5,6 +5,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@DesignPattern(
+	name = "Abstract_Factory",
+	participants = {"ConcreteProduct"}
+)
 public class EnergyDrinkPhoto extends Photo {
 
 	protected List<Ingredient> ingredients = new ArrayList<Ingredient>();

@@ -1,5 +1,13 @@
 package org.wahlzeit.model;
 
+@DesignPattern(
+    name = "Template_Method",
+    participants = {"AbstractClass"}
+)
+@DesignPattern(
+    name = "Bridge",
+    participants = {"AbstractBridge"}
+)
 public abstract class AbstractCoordinate implements Coordinate{
 
     /**
