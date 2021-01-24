@@ -1,6 +1,6 @@
 package org.wahlzeit.model;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @DesignPattern(
 	name = "Abstract_Factory",
@@ -33,39 +33,28 @@ public class EnergyDrinkPhotoFactory extends PhotoFactory {
     }
 
     /**
-     * @pre: id may not be null
+     * @pre: arguments except ingredients may not be null
      * @post: ingredients, brand, manufacturer of new instance may not be null
-     * @param id PhotoId
-     * @param ingredients list of this energy drinks ingredients
-     * @param brand brand of this energy drink
-     * @param manufacturer manufacturer of this energy drink
+     * @param id the PhotoId for the new photo
+     * @param brand the brand of the drink, e.g. Monster
+     * @param tasteDirection the taste of the drink, e.g. exotic
+     * @param manufacturer the manufacturer of the drink, e.g. S.Spitz GmbH
+     * @param ingredients the list of ingredients for the drink, e.g. sugar 11g - can be null if not known
      * @return a new EnergyDrinkPhoto instance
      * @throws CreateEnergyDrinkPhotoException
      */
-    public EnergyDrinkPhoto createPhoto(PhotoId id, List<Ingredient> ingredients, String brand, String manufacturer) throws CreateEnergyDrinkPhotoException {
+    public EnergyDrinkPhoto createPhoto(PhotoId id, String brand, String tasteDirection, String manufacturer, ArrayList<Ingredient> ingredients) throws CreateEnergyDrinkPhotoException {
         assertNotNullArgument(id);
+        assertNotNullArgument(brand);
+        assertNotNullArgument(tasteDirection);
+        assertNotNullArgument(manufacturer);
         EnergyDrinkPhoto newPhoto;
         try{
-            newPhoto = new EnergyDrinkPhoto(id, ingredients, brand, manufacturer);
-        }catch(IllegalStateException e){
-            throw new CreateEnergyDrinkPhotoException(e);
-        }
-        return newPhoto;
-    }
-
-    /**
-     * @pre: id may not be null
-     * @post: brand of new instance may not be null 
-     * @param id PhotoId
-     * @param brand brand of this energy drink
-     * @return a new EnergyDrinkPhoto instance
-     * @throws CreateEnergyDrinkPhotoException
-     */
-    public EnergyDrinkPhoto createPhoto(PhotoId id, String brand) throws CreateEnergyDrinkPhotoException {
-        assertNotNullArgument(id);
-        EnergyDrinkPhoto newPhoto;
-        try{
-            newPhoto = new EnergyDrinkPhoto(id, brand);
+            EnergyDrinkType typ = EnergyDrinkPhotoManager.getInstance().requestEnergyDrinkType(brand, tasteDirection, manufacturer, ingredients);
+            if(ingredients != null  && !ingredients.isEmpty()){
+                typ.setIngredients(ingredients);
+            }
+            newPhoto = new EnergyDrinkPhoto(id, typ);
         }catch(IllegalStateException e){
             throw new CreateEnergyDrinkPhotoException(e);
         }
