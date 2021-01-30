@@ -37,8 +37,8 @@ public class CoordinateHelper {
 
     /**
      * For shared object functionality
-     * 
      * @return returns the similar object or the template used and shares it
+     * for sequence of method calls, visit documentation at ...
      */
     public CartesianCoordinate requestCartesianCoordinate(double x, double y, double z) {
         CartesianCoordinate template;
@@ -64,8 +64,8 @@ public class CoordinateHelper {
 
     /**
      * For shared object functionality
-     * 
      * @return returns the similar object or the template used and shares it
+     * for sequence of method calls, visit documentation at ...
      */
     public SphericCoordinate requestSphericCoordinate(double phi, double theta, double radius) {
         SphericCoordinate template;

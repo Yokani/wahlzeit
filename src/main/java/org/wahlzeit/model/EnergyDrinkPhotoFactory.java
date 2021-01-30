@@ -42,6 +42,7 @@ public class EnergyDrinkPhotoFactory extends PhotoFactory {
      * @param ingredients the list of ingredients for the drink, e.g. sugar 11g - can be null if not known
      * @return a new EnergyDrinkPhoto instance
      * @throws CreateEnergyDrinkPhotoException
+     * for sequence of method calls, visit documentation at ...
      */
     public EnergyDrinkPhoto createPhoto(PhotoId id, String brand, String tasteDirection, String manufacturer, ArrayList<Ingredient> ingredients) throws CreateEnergyDrinkPhotoException {
         assertNotNullArgument(id);
